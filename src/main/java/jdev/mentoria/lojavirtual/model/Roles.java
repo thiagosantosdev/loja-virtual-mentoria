@@ -1,5 +1,7 @@
 package jdev.mentoria.lojavirtual.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "role")
-@SequenceGenerator(name = "seq_acesso", sequenceName = "seq_acesso, initialValue = 1, allocationSize = 1")
-public class Roles implements GrantedAuthority {
+@SequenceGenerator(name = "seq_acesso", sequenceName = "seq_acesso", allocationSize = 1,  initialValue = 1)
+public class Roles implements GrantedAuthority, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,8 +28,11 @@ public class Roles implements GrantedAuthority {
 	@Override
 	public String getAuthority() {
 
-		return descricao;
+		return this.descricao;
 	}
+	
+	
+	
 
 	public Long getId() {
 		return id;
@@ -70,6 +75,9 @@ public class Roles implements GrantedAuthority {
 		return true;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return descricao;
+	}
 
 }

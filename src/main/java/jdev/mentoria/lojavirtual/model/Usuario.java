@@ -1,5 +1,6 @@
 package jdev.mentoria.lojavirtual.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name = "usuario")
 @SequenceGenerator(name = "seq_usuario", sequenceName = "seq_usuario", allocationSize = 1, initialValue = 1)
-public class Usuario implements UserDetails {
+public class Usuario implements UserDetails, Serializable  {
 
 
 	private static final long serialVersionUID = 1L;
