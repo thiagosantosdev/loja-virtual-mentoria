@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import jdev.mentoria.lojavirtual.model.Roles;
 import jdev.mentoria.lojavirtual.repository.RoleRepository;
 import jdev.mentoria.lojavirtual.service.RoleService;
 
+//@CrossOrigin(origins = "https://www.jdevtreinamento.com.br")
 @Controller
 @RestController
 @RequestMapping(value = "/acesso")
@@ -35,6 +37,7 @@ public class RoleController {
 		return new ResponseEntity<Roles>(roleSalvo, HttpStatus.OK);
 	}
 	
+	//@Secured({ "ROLE_GERENTE", "ROLE_ADMIN" })
 	@ResponseBody /* Pode dar um retorno da API */
 	@PostMapping(value = "/deleteAcesso")
 	public ResponseEntity<?> deleteRole(@RequestBody Roles role) { /* Recebe o JSON e converte para objeto */
