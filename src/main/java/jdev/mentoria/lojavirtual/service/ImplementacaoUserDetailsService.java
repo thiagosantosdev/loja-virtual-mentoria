@@ -11,7 +11,7 @@ import jdev.mentoria.lojavirtual.model.Usuario;
 import jdev.mentoria.lojavirtual.repository.UsuarioRepository;
 
 @Service
-public class ImplementaçãoUserDetailsService implements UserDetailsService {
+public class ImplementacaoUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
