@@ -1,5 +1,6 @@
 package jdev.mentoria.lojavirtual.security;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import jdev.mentoria.lojavirtual.ApplicationContextLoad;
 import jdev.mentoria.lojavirtual.model.Usuario;
 import jdev.mentoria.lojavirtual.repository.UsuarioRepository;
@@ -23,6 +26,7 @@ public class JWTTokenAutenticacaoService {
 
 	/*Token de validade de 11 dias*/
 	private static final long EXPIRATION_TIME = 959990000;
+
 	
 	/*Chave de senha para juntar com o JWT*/
 	private static final String SECRET = "ss/-*-*sds565dsd-s/d-s*dsds";
@@ -56,9 +60,11 @@ public class JWTTokenAutenticacaoService {
 	
 	
 	/*Retorna o usuário validado com token ou caso nao seja valido retona null*/
-	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		String token = request.getHeader(HEADER_STRING);
+		
+		try {
 		
 		if (token != null) {
 			
@@ -86,8 +92,20 @@ public class JWTTokenAutenticacaoService {
 			}
 			
 		}
+		}catch (SignatureException e) {
+			response.getWriter().write("Token inválido, favor relogar!");
 		
-		liberacaoCors(response);
+		}catch (ExpiredJwtException e) {
+			response.getWriter().write("Token expirado, favor relogar!");
+
+			
+		}
+		
+		finally {
+			liberacaoCors(response);
+
+		}
+		
 		return null;
 	}
 	
