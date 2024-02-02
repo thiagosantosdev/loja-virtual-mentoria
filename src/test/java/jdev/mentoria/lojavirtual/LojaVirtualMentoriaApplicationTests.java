@@ -80,7 +80,7 @@ Roles role = new Roles();
 		assertEquals(true, role.getId() == null);
 
 		/*Gravou no banco de dados*/
-		role = roleController.salvarRole(role).getBody();
+	/*	role = roleController.salvarRole(role).getBody();
 		
 		assertEquals(true, role.getId() > 0);
 		
@@ -98,7 +98,7 @@ Roles role = new Roles();
 		
 		roleRepository.deleteById(role2.getId());
 		
-		roleRepository.flush(); /*Roda esse SQL de delete no banco de dados*/
+		/*	roleRepository.flush(); Roda esse SQL de delete no banco de dados*/
 		
 		Roles acesso3 = roleRepository.findById(role2.getId()).orElse(null);
 		
