@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.enums.StatusContaReceber;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,28 +31,33 @@ public class ContaReceber implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_conta_receber")
 	private Long id_conta_receb;
-	
-	
-	
+
+	@Column(nullable = false)
 	private String descricao;
+
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	
 	private StatusContaReceber status;
-	
+
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data_vencimento;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date data_pagamento;
-	
+
+	@Column(nullable = false)
 	private BigDecimal valor_total;
+
 	private BigDecimal valor_desc;
-	
-	@ManyToOne(targetEntity = Pessoa.class)
+
+	@ManyToOne(targetEntity = PessoaFisica.class)
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
-	private Pessoa pessoa;
-	
-	
+	private PessoaFisica pessoa;
+
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
 
 	public Long getId_conta_receb() {
 		return id_conta_receb;
@@ -113,10 +119,17 @@ public class ContaReceber implements Serializable {
 		return pessoa;
 	}
 
-	public void setPessoa(Pessoa pessoa) {
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+
+	public void setPessoa(PessoaFisica pessoa) {
 		this.pessoa = pessoa;
 	}
-	
+
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
 
 	@Override
 	public int hashCode() {
@@ -142,11 +155,5 @@ public class ContaReceber implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -21,93 +22,80 @@ import jakarta.persistence.TemporalType;
 @Entity
 @Table(name = "vd_cp-lj-virt")
 @SequenceGenerator(name = "seq_vd_cp-lj-virt", sequenceName = "seq_vd_cp-lj-virt", initialValue = 1, allocationSize = 1)
-public class VendaCompraLojaVirtual implements Serializable{
+public class VendaCompraLojaVirtual implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_vd_cp-lj-virt")
 	private Long id;
-	
+
 	@ManyToOne(targetEntity = PessoaFisica.class)
-	@JoinColumn(name = "pessoa_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
+	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private PessoaFisica pessoa;
-	
+
 	@ManyToOne(targetEntity = PessoaJuridica.class)
 	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
 	private PessoaJuridica empresa;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "endereco_entrega_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "endereco_entrega_fk"))
+	@JoinColumn(name = "endereco_entrega_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "endereco_entrega_fk"))
 	private Endereco endereco_entrega;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "endereco_cobranca_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "endereco_cobranca_fk"))
+	@JoinColumn(name = "endereco_cobranca_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "endereco_cobranca_fk"))
 	private Endereco endereco_cobranca;
-	
+
+	@Column(nullable = false)
 	private BigDecimal valor_total;
+
 	private BigDecimal valor_desc;
-	
-	
+
 	@ManyToOne
-	@JoinColumn(name = "forma_pagamento_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "forma_pagamento_fk"))
+	@JoinColumn(name = "forma_pagamento_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "forma_pagamento_fk"))
 	private FormaPagamento forma_pagamento;
-	
+
 	@OneToOne
-	@JoinColumn(name = "nota_fiscal_venda_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_fiscal_venda_fk"))
+	@JoinColumn(name = "nota_fiscal_venda_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_fiscal_venda_fk"))
 	private NotaFiscalVenda nota_fiscal_venda;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "cupom_desc_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "cupom_desc_fk"))
+	@JoinColumn(name = "cupom_desc_id", foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "cupom_desc_fk"))
 	private CupomDesc cupom_desc;
-	
+
+	@Column(nullable = false)
 	private BigDecimal valor_frete;
-	private Integer dias_entrega;
 	
+	@Column(nullable = false)
+	private Integer dias_entrega;
+
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data_venda;
-	
+
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data_entrega;
-	
-
-	
 
 	public PessoaFisica getPessoa() {
 		return pessoa;
 	}
 
-
-
 	public PessoaJuridica getEmpresa() {
 		return empresa;
 	}
-
-
 
 	public void setPessoa(PessoaFisica pessoa) {
 		this.pessoa = pessoa;
 	}
 
-
-
 	public void setEmpresa(PessoaJuridica empresa) {
 		this.empresa = empresa;
 	}
 
-
-
 	public Long getId() {
 		return id;
 	}
-
-	
 
 	public Endereco getEndereco_entrega() {
 		return endereco_entrega;
@@ -157,8 +145,6 @@ public class VendaCompraLojaVirtual implements Serializable{
 		this.id = id;
 	}
 
-	
-
 	public void setEndereco_entrega(Endereco endereco_entrega) {
 		this.endereco_entrega = endereco_entrega;
 	}
@@ -202,8 +188,6 @@ public class VendaCompraLojaVirtual implements Serializable{
 	public void setData_entrega(Date data_entrega) {
 		this.data_entrega = data_entrega;
 	}
-	
-	
 
 	@Override
 	public int hashCode() {
@@ -212,8 +196,6 @@ public class VendaCompraLojaVirtual implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
-	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -231,22 +213,5 @@ public class VendaCompraLojaVirtual implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

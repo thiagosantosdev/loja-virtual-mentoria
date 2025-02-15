@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -34,13 +36,43 @@ public class Usuario implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usuario")
 	private Long id_usuario;
 	
+	@Column(nullable = false)
 	private String login;
+
+	@Column(nullable = false)
 	private String senha;
-	
+
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dataSenha;
 	
+	@ManyToOne(targetEntity = PessoaFisica.class)
+	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
+	private PessoaFisica pessoa;
+
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
 	
+	public PessoaFisica getPessoa() {
+		return pessoa;
+	}
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+	public List<Acesso> getAcessos() {
+		return acessos;
+	}
+	public void setPessoa(PessoaFisica pessoa) {
+		this.pessoa = pessoa;
+	}
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
+	public void setAcessos(List<Acesso> acessos) {
+		this.acessos = acessos;
+	}
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuarios_acesso", 
 		uniqueConstraints = @UniqueConstraint (columnNames = {"usuario_id", "acesso_id"} ,
@@ -53,6 +85,8 @@ public class Usuario implements UserDetails{
 						unique = false, referencedColumnName = "id_Acesso", table = "acesso",
 						foreignKey = @ForeignKey(name = "aesso_fk", value = ConstraintMode.CONSTRAINT)))
 	private List<Acesso> acessos;
+	
+	
 	
 	
 	public Long getId_usuario() {
@@ -80,6 +114,8 @@ public class Usuario implements UserDetails{
 		this.dataSenha = dataSenha;
 	}
 	
+	
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
@@ -87,33 +123,37 @@ public class Usuario implements UserDetails{
 	}
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
+
 		return this.senha;
 	}
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
+
 		return this.login;
 	}
 	
 	@Override
     public boolean isAccountNonExpired() {
-        return true;
+       
+		return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+       
+    	return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        
+    	return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        
+    	return true;
     }
 	
 }

@@ -14,8 +14,11 @@ public class PessoaFisica extends Pessoa {
 
 	
 	private static final long serialVersionUID = 1L;
+	
 	@Column(nullable = false)
 	private String cpf;
+	
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
 	

@@ -64,6 +64,7 @@ public class StatusRastreio implements Serializable{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -92,8 +93,4 @@ public class StatusRastreio implements Serializable{
 	
 	
 	
-	
-
-
-
 }

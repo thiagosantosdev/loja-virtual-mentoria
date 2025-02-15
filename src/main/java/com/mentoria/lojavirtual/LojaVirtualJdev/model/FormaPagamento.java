@@ -2,6 +2,7 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,8 @@ public class FormaPagamento implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_form_pag")
 	private Long id_form_pag;
+	
+	@Column(nullable = false)
 	private String descricao;
 	
 	
@@ -62,7 +65,6 @@ public class FormaPagamento implements Serializable{
 			return false;
 		return true;
 	}
-	
 	
 	
 	

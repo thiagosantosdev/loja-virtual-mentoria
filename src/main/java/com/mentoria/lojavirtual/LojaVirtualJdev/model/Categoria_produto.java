@@ -71,8 +71,4 @@ public class Categoria_produto implements Serializable {
 	}
 	
 	
-	
-	
-	
-
 }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import com.mentoria.lojavirtual.LojaVirtualJdev.enums.StatusContaPagar;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,39 +24,40 @@ import jakarta.persistence.TemporalType;
 @Entity
 @Table(name = "conta_pagar")
 @SequenceGenerator(name = "seq_conta_pagar", sequenceName = "seq_conta_pagar", allocationSize = 1, initialValue = 1)
-public class ContaPagar implements Serializable{
+public class ContaPagar implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_conta_pagar")
 	private Long id_conta_pagar;
-	
+
+	@Column(nullable = false)
 	private String descricao;
-	
+
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private StatusContaPagar status;
-	
+
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data_vencimento;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date data_pagamento;
-	
+
+	@Column(nullable = false)
 	private BigDecimal valor_total;
+
 	private BigDecimal valor_desc;
-	
-	@ManyToOne(targetEntity = Pessoa.class)
-	@JoinColumn(name = "pessoa_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
-	private Pessoa pessoa;
-	
-	@ManyToOne(targetEntity = Pessoa.class)
-	@JoinColumn(name = "pessoa_forn_id", nullable = false, 
-	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_forn_fk"))
-	private Pessoa pessoa_fornec;
-	
-	
+
+	@ManyToOne(targetEntity = PessoaFisica.class)
+	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
+	private PessoaFisica pessoa;
+
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
 
 	public Long getId_conta_pagar() {
 		return id_conta_pagar;
@@ -116,19 +119,17 @@ public class ContaPagar implements Serializable{
 		return pessoa;
 	}
 
-	public void setPessoa(Pessoa pessoa) {
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+
+	public void setPessoa(PessoaFisica pessoa) {
 		this.pessoa = pessoa;
 	}
 
-	public Pessoa getPessoa_fornec() {
-		return pessoa_fornec;
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
 	}
-
-	public void setPessoa_fornec(Pessoa pessoa_fornec) {
-		this.pessoa_fornec = pessoa_fornec;
-	}
-	
-	
 
 	@Override
 	public int hashCode() {
@@ -137,8 +138,6 @@ public class ContaPagar implements Serializable{
 		result = prime * result + ((id_conta_pagar == null) ? 0 : id_conta_pagar.hashCode());
 		return result;
 	}
-	
-	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -156,15 +155,5 @@ public class ContaPagar implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
