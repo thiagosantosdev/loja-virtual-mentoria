@@ -1,12 +1,23 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev.security;
 
+import java.io.IOException;
 import java.util.Date;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.mentoria.lojavirtual.LojaVirtualJdev.ApplicationContextLoad;
+import com.mentoria.lojavirtual.LojaVirtualJdev.model.Usuario;
+import com.mentoria.lojavirtual.LojaVirtualJdev.repository.UsuarioRepository;
+
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /*Criar a autenticação e retornar também a autenticação JWT*/
@@ -25,12 +36,12 @@ public class JWTTokenAutenticacaoService {
 	private static final String HEADER_STRING = "Authorization";
 
 	/* Gera o token e dá a resposta para o cliente com o JWT */
-	public void addAuthentication(HttpServletResponse response, String username) throws Exception {
+	public void addAuthentication(HttpServletResponse response, UserDetails username) throws Exception {
 
 		/* Montagem do token */
 
 		String JWT = Jwts.builder() /* Chama o gerador de token */
-				.setSubject(username) /* Adiciona o user */
+				.setSubject(username.getUsername()) /* Adiciona o user */
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) /* tempo de expiração */
 				.signWith(SignatureAlgorithm.HS512, SECRET).compact(); /* criptografa e compacta */
 		/* Ex.: Bearer dfdsfmopmFSDEF.SFERWFOfsdsf.DRTHGHTMO */
@@ -42,11 +53,96 @@ public class JWTTokenAutenticacaoService {
 		 */
 		response.addHeader(HEADER_STRING, token);
 
-		//liberacaoCors(response);
+		liberacaoCors(response);
 
 		/* Usado para ver no Postmam para teste */
 		response.getWriter().write("{\"Authorization\": \"" + token + "\"}");
 
 	}
+	
+	
+	/*Retorna o usuário validado com token ou caso não seja validado retorna null*/
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		String token = request.getHeader(HEADER_STRING);
+		try {
+		
+		if(token != null) {  /*Se o token existir*/
+			
+			String tokenLimpo = token.replace(TOKEN_PREFIX, "").trim();
+			
+			/*Faz a validação do token do usuário na requisição e obtém o USER*/
+			String user = Jwts.parser().
+					setSigningKey(SECRET)
+					.parseClaimsJws(tokenLimpo)
+					.getBody().getSubject();/*ADMIN ou Pedro*/
+			if(user != null) { /*Se user foi encontrado*/
+				
+				Usuario usuario = ApplicationContextLoad.
+						getApplicationContext().
+						getBean(UsuarioRepository.class).findUserByLogin(user);
+				if(usuario != null) {
+					return new UsernamePasswordAuthenticationToken(
+							usuario.getLogin(),
+							usuario.getSenha(),
+							usuario.getAuthorities());
+				}
+				
+			}
+			
+		}
+		}catch(SignatureException e) {
+			response.getWriter().write("Token está inválido");
+			
+		}catch(ExpiredJwtException e) {
+			response.getWriter().write("Token está expirado, efetue o login novamente!");
+		}
+		finally {
+		liberacaoCors(response);
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	/*Fazendo liberação contra erro de CORS no navegador*/
+	private void liberacaoCors(HttpServletResponse response) {
+		
+		if(response.getHeader("Access-Control-Allow-Origin") == null) {/*se não tem o parâmetro adiciona e libera*/
+			response.addHeader("Access-Control-Allow-Origin", "*");/*asterisco libera*/
+			
+		}
+		
+		if(response.getHeader("Access-Control-Allow-Headers") == null) {/*se não tem o parâmetro adiciona e libera*/
+			response.addHeader("Access-Control-Allow-Headers", "*");/*asterisco libera*/
+			
+		}
+		
+		if(response.getHeader("Access-Control-Request-Headers") == null) {/*se não tem o parâmetro adiciona e libera*/
+			response.addHeader("Access-Control-Request-Headers", "*");/*asterisco libera*/
+			
+		}
+		
+		if(response.getHeader("Access-Control-Allow-Methods") == null) {/*se não tem o parâmetro adiciona e libera*/
+			response.addHeader("Access-Control-Allow-Methods", "*");/*asterisco libera*/
+			
+		}
+	}
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
