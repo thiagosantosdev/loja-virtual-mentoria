@@ -34,18 +34,29 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 			setAuthenticationManager(authenticationManager);
 		}
 
-		// Retorna o usuário ao processar a autenticação
-		public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-				throws AuthenticationException, IOException, ServletException {
+		/* Retorna o usuário ao processar a autenticação */
+		@Override
+		public Authentication attemptAuthentication(javax.servlet.http.HttpServletRequest request, 
+				javax.servlet.http.HttpServletResponse response)
+				throws AuthenticationException, IOException, javax.servlet.ServletException {
 
-			// Está pegando o token para validar
+			/* Está pegando o token para validar */
 			Usuario user = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
 			
-			// Retorna o usuário login, senha e acesso		
+			/* Retorna o usuário login, senha e acesso */		
 			return getAuthenticationManager()
 					.authenticate(new UsernamePasswordAuthenticationToken(
 						user.getLogin(), user.getSenha()));
 		}
+		/*	
+		public Authentication attemptAuthentication(javax.servlet.http.HttpServletRequest request,
+				javax.servlet.http.HttpServletResponse response)
+				throws AuthenticationException, IOException, javax.servlet.ServletException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		*/
 		
 		protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 				Authentication authResult){
@@ -72,6 +83,9 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 			
 		}
 
+	
+
+		
 	
 
 	

@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.mentoria.lojavirtual.LojaVirtualJdev.repository.UsuarioRepository;
 import com.mentoria.lojavirtual.LojaVirtualJdev.service.ImplementacaoUserDetailsService;
 
 import jakarta.servlet.http.HttpSessionListener;
@@ -26,12 +25,6 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter implements H
 
 	@Autowired
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
-	@Autowired
-	private UsuarioRepository usuarioRepository;
-	
-	
-
-	
 	
 	
 	@Override
@@ -40,20 +33,23 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter implements H
 		
 		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 		.disable().authorizeRequests().antMatchers("/").permitAll()
-		.antMatchers("/index").permitAll()
+		.antMatchers("/index","/pagamento/**","/resources/**","/static/**","/templates/**","classpath:/static/**","classpath:/resources/**","classpath:/templates/**").permitAll()
+		.antMatchers(HttpMethod.POST, "/requisicaojunoboleto/**", "/notificacaoapiv2","/pagamento/**","/resources/**","/static/**","/templates/**","classpath:/static/**","classpath:/resources/**","classpath:/templates/**","/recuperarSenha","/criaAcesso").permitAll()
+		.antMatchers(HttpMethod.GET, "/requisicaojunoboleto/**", "/notificacaoapiv2","/pagamento/**","/resources/**","/static/**","/templates/**","classpath:/static/**","classpath:/resources/**","classpath:/templates/**","/recuperarSenha","/criaAcesso").permitAll()
 		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 		
 		/* redireciona ou da um retorno para index quando desloga*/
 		.anyRequest().authenticated().and().logout().logoutSuccessUrl("/index")
 		
-		/*mapeia o logout do sistema*/
-		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		
-		/*Filtra as requisicoes para login de JWT*/
-		.and().addFilterAfter(new JWTLoginFilter("/login", authenticationManager()),
-				UsernamePasswordAuthenticationFilter.class)
-		
-		.addFilterBefore(new JwtApiAutenticacaoFilter(), UsernamePasswordAuthenticationFilter.class);
+		/* Mapeia URL de logout e invalida o usuário */
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				
+				/* Filtra requisições de login para autenticação */
+				.and().addFilterAfter(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+				
+				/* Filtra demais requisições para verificar a presença do TOKEN JWT no HEADER HTTP */
+				.addFilterBefore(new JwtApiAutenticacaoFilter(), UsernamePasswordAuthenticationFilter.class);		
+
 		
 	}
 	
@@ -64,7 +60,6 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter implements H
 		auth.userDetailsService(implementacaoUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 		
 	}
-	
 	
 
 
