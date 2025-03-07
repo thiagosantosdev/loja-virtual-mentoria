@@ -1,5 +1,7 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev.security;
 
+import javax.servlet.http.HttpSessionListener;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,8 +18,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.service.ImplementacaoUserDetailsService;
 
-import jakarta.servlet.http.HttpSessionListener;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -31,28 +31,31 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter implements H
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		
-		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		.disable().authorizeRequests().antMatchers("/").permitAll()
-		.antMatchers("/index","/pagamento/**","/resources/**","/static/**","/templates/**","classpath:/static/**","classpath:/resources/**","classpath:/templates/**").permitAll()
-		.antMatchers(HttpMethod.POST, "/requisicaojunoboleto/**", "/notificacaoapiv2","/pagamento/**","/resources/**","/static/**","/templates/**","classpath:/static/**","classpath:/resources/**","classpath:/templates/**","/recuperarSenha","/criaAcesso").permitAll()
-		.antMatchers(HttpMethod.GET, "/requisicaojunoboleto/**", "/notificacaoapiv2","/pagamento/**","/resources/**","/static/**","/templates/**","classpath:/static/**","classpath:/resources/**","classpath:/templates/**","/recuperarSenha","/criaAcesso").permitAll()
-		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-		
-		/* redireciona ou da um retorno para index quando desloga*/
-		.anyRequest().authenticated().and().logout().logoutSuccessUrl("/index")
-		
-		/* Mapeia URL de logout e invalida o usuário */
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				
-				/* Filtra requisições de login para autenticação */
-				.and().addFilterAfter(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-				
-				/* Filtra demais requisições para verificar a presença do TOKEN JWT no HEADER HTTP */
-				.addFilterBefore(new JwtApiAutenticacaoFilter(), UsernamePasswordAuthenticationFilter.class);		
-
-		
+		http
+		.csrf()
+			.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				.disable()
+		.authorizeRequests()
+			.antMatchers("/")
+				.permitAll()
+			.antMatchers("/index")
+				.permitAll()
+			.antMatchers(HttpMethod.OPTIONS, "/**")
+				.permitAll()
+			.anyRequest()
+				.authenticated()
+					.and()
+						.logout()
+							.logoutSuccessUrl("/index")
+							.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+					.and()
+						.addFilterAfter(
+							new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class
+						)
+						.addFilterBefore(
+							new JwtApiAutenticacaoFilter(), UsernamePasswordAuthenticationFilter.class
+						);
 	}
-	
 	
 	/*Irá consultar o user no banco com Spring Security*/
 	@Override

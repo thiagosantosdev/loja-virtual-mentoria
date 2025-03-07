@@ -3,10 +3,11 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.security;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.ApplicationContextLoad;
@@ -17,16 +18,14 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 /*Criar a autenticação e retornar também a autenticação JWT*/
+
 @Service
-@Component
 public class JWTTokenAutenticacaoService {
 
 	/* Token de validade de 2 dias */
-	private static final long EXPIRATION_TIME = 172800000;
+	private static final long EXPIRATION_TIME = 172800000; /*172800000*/
 
 	/* Chave de senha para juntar com o JWT */
 	private static final String SECRET = "SenhaExtremamenteSecreta";
@@ -54,8 +53,20 @@ public class JWTTokenAutenticacaoService {
 		response.addHeader(HEADER_STRING, token);
 
 		liberacaoCors(response);
+		
+		Usuario usuario = ApplicationContextLoad.
+				getApplicationContext().
+				getBean(UsuarioRepository.class).findUserByLogin(username);
+		
+		System.out.println(usuario.getEmpresa().getId_pessoa());
+		
+		/*Usado para ver no Postman para teste*/
+		response.getWriter().write("{\"Authorization\": \""+ token + "\","
+				                + "\"username\":\""+ username +"\","
+				                + "\"id\":\""+ usuario.getId_usuario() +"\","
+				                + "\"empresa\":\""+usuario.getEmpresa().getId_pessoa() + "\"}");
 
-		/* Usado para ver no Postmam para teste */
+		/* Usado para ver no Postmam para teste  */
 		response.getWriter().write("{\"Authorization\": \"" + token + "\"}");
 
 	}
@@ -92,7 +103,7 @@ public class JWTTokenAutenticacaoService {
 			
 		}
 		}catch(SignatureException e) {
-			response.getWriter().write("Token está inválido");
+			response.getWriter().write("Token está inválido!");
 			
 		}catch(ExpiredJwtException e) {
 			response.getWriter().write("Token está expirado, efetue o login novamente!");

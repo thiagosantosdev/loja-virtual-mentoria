@@ -2,6 +2,11 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.security;
 
 import java.io.IOException;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,32 +18,25 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.Usuario;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-	// Configurando o gerenciador de autenticação
-		protected JWTLoginFilter(String url, AuthenticationManager authenticationManager) {
+	/* Configurando o gerenciador de autenticação */
+		public JWTLoginFilter(String url, AuthenticationManager authenticationManager) {
 			
-			// Obriga a autenticar a url
+			/* Obriga a autenticar a url */
 			super(new AntPathRequestMatcher(url));
 			
-			// Gerenciador de autenticação
+			/* Gerenciador de autenticação */
 			setAuthenticationManager(authenticationManager);
 		}
 
 		/* Retorna o usuário ao processar a autenticação */
 		@Override
-		public Authentication attemptAuthentication(javax.servlet.http.HttpServletRequest request, 
-				javax.servlet.http.HttpServletResponse response)
-				throws AuthenticationException, IOException, javax.servlet.ServletException {
+		public Authentication attemptAuthentication(HttpServletRequest request, 
+				HttpServletResponse response)
+				throws AuthenticationException, IOException, ServletException {
 
 			/* Está pegando o token para validar */
 			Usuario user = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
@@ -48,27 +46,19 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 					.authenticate(new UsernamePasswordAuthenticationToken(
 						user.getLogin(), user.getSenha()));
 		}
-		/*	
-		public Authentication attemptAuthentication(javax.servlet.http.HttpServletRequest request,
-				javax.servlet.http.HttpServletResponse response)
-				throws AuthenticationException, IOException, javax.servlet.ServletException {
-			// TODO Auto-generated method stub
-			return null;
-		}
 		
-		*/
-		
+		@Override
 		protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-				Authentication authResult){
+				Authentication authResult) throws IOException, ServletException{
 			try {
 				new JWTTokenAutenticacaoService().addAuthentication(response, authResult.getName());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
+		@Override
 		protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-				AuthenticationException failed) throws IOException {
+				AuthenticationException failed) throws IOException, ServletException {
 			if (failed instanceof BadCredentialsException) {
 				response.getWriter().write("Usuário e/ou senha não encontrado(s)!");
 			} else {
@@ -76,12 +66,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 			}
 		}
 
-		@Override
-		public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-				throws IOException, ServletException {
-			// TODO Auto-generated method stub
-			
-		}
+		
 
 	
 

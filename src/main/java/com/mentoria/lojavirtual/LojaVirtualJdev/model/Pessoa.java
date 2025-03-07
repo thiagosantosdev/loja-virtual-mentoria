@@ -4,17 +4,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -44,35 +48,41 @@ public abstract class Pessoa implements Serializable{
 	
 	
 	
-	public List<Endereco> getEnderecos() {
-		return enderecos;
-	}
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
-	}
+
+	
+	
+	
+	
+	
 	public Long getId_pessoa() {
 		return id_pessoa;
-	}
-	public void setId_pessoa(Long id_pessoa) {
-		this.id_pessoa = id_pessoa;
 	}
 	public String getNome_pessoa() {
 		return nome_pessoa;
 	}
-	public void setNome_pessoa(String nome_pessoa) {
-		this.nome_pessoa = nome_pessoa;
-	}
 	public String getEmail() {
 		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	public String getTelefone() {
 		return telefone;
 	}
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+	public void setId_pessoa(Long id_pessoa) {
+		this.id_pessoa = id_pessoa;
+	}
+	public void setNome_pessoa(String nome_pessoa) {
+		this.nome_pessoa = nome_pessoa;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
 	}
 	@Override
 	public int hashCode() {
