@@ -3,6 +3,7 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.security;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.mail.MethodNotSupportedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +17,7 @@ import com.mentoria.lojavirtual.LojaVirtualJdev.repository.UsuarioRepository;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 
@@ -107,6 +109,10 @@ public class JWTTokenAutenticacaoService {
 			
 		}catch(ExpiredJwtException e) {
 			response.getWriter().write("Token está expirado, efetue o login novamente!");
+			
+		}catch(MalformedJwtException e) {
+			response.getWriter().write("Token JWT mal formatado ou faltando partes!");
+		
 		}
 		finally {
 		liberacaoCors(response);
