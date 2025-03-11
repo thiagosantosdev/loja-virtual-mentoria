@@ -5,10 +5,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,6 +40,9 @@ public class CupomDesc implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date data_validade;
 	
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
 	
 	
 	
@@ -68,6 +75,12 @@ public class CupomDesc implements Serializable{
 	}
 	public void setData_validade(Date data_validade) {
 		this.data_validade = data_validade;
+	}
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
 	}
 	
 	

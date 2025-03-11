@@ -36,7 +36,9 @@ public class ImagemProduto implements Serializable{
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "produto_fk"))
 	private Produto produto;
 
-	
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
 	
 	public Long getId_imagem() {
 		return id_imagem;
@@ -71,6 +73,14 @@ public class ImagemProduto implements Serializable{
 	}
 
 	
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

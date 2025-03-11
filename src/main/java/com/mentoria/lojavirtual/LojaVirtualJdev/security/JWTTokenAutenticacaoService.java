@@ -3,7 +3,6 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.security;
 import java.io.IOException;
 import java.util.Date;
 
-import javax.mail.MethodNotSupportedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

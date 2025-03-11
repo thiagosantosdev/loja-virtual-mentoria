@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -46,6 +47,24 @@ public class NotaFiscalVenda implements Serializable{
 	private VendaCompraLojaVirtual vd_cp_lj_virt;
 	
 	
+	public VendaCompraLojaVirtual getVd_cp_lj_virt() {
+		return vd_cp_lj_virt;
+	}
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+	public void setVd_cp_lj_virt(VendaCompraLojaVirtual vd_cp_lj_virt) {
+		this.vd_cp_lj_virt = vd_cp_lj_virt;
+	}
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
+
+
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
+
 	public Long getId_nota_fiscal_venda() {
 		return id_nota_fiscal_venda;
 	}

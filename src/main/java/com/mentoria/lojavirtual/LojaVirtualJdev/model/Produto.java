@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -62,7 +66,12 @@ public class Produto implements Serializable{
 	
 	private Boolean alerta_qtd_estoque = Boolean.FALSE;
 	
-	
+
+
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
+
 	
 	public Long getId_produto() {
 		return id_produto;
@@ -156,6 +165,12 @@ public class Produto implements Serializable{
 	}
 	
 	
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

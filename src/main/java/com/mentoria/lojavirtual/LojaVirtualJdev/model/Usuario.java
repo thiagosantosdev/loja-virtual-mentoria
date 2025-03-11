@@ -37,7 +37,7 @@ public class Usuario implements UserDetails, Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usuario")
 	private Long id_usuario;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String login;
 
 	@Column(nullable = false)
@@ -70,12 +70,6 @@ public class Usuario implements UserDetails, Serializable{
 						unique = false, referencedColumnName = "id_Acesso", table = "acesso",
 						foreignKey = @ForeignKey(name = "aesso_fk", value = ConstraintMode.CONSTRAINT)))
 	private List<Acesso> acessos;
-	
-	
-	
-	
-	
-	
 	
 	
 	

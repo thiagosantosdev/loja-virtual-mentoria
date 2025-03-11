@@ -49,13 +49,14 @@ public class NotaFiscalCompra implements Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date data_compra;
 	
-	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@ManyToOne(targetEntity = PessoaFisica.class)
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
-	private PessoaJuridica pessoa;
-	
+	private PessoaFisica pessoa;
+
 	@ManyToOne(targetEntity = PessoaJuridica.class)
 	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
 	private PessoaJuridica empresa;
+
 	
 	@ManyToOne
 	@JoinColumn(name = "conta_pagar_id", nullable = false,
@@ -116,10 +117,7 @@ public class NotaFiscalCompra implements Serializable{
 
 
 
-	public PessoaJuridica getPessoa() {
-		return pessoa;
-	}
-
+	
 
 
 	public PessoaJuridica getEmpresa() {
@@ -182,10 +180,7 @@ public class NotaFiscalCompra implements Serializable{
 
 
 
-	public void setPessoa(PessoaJuridica pessoa) {
-		this.pessoa = pessoa;
-	}
-
+	
 
 
 	public void setEmpresa(PessoaJuridica empresa) {
@@ -196,6 +191,18 @@ public class NotaFiscalCompra implements Serializable{
 
 	public void setContaPagar(ContaPagar contaPagar) {
 		this.contaPagar = contaPagar;
+	}
+
+
+
+	public PessoaFisica getPessoa() {
+		return pessoa;
+	}
+
+
+
+	public void setPessoa(PessoaFisica pessoa) {
+		this.pessoa = pessoa;
 	}
 
 

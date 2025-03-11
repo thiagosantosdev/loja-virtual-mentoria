@@ -40,6 +40,11 @@ public class NotaItemProduto implements Serializable{
 	
 	
 
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
+
+
 	public Long getIdNotaItemProd() {
 		return idNotaItemProd;
 	}
@@ -73,6 +78,14 @@ public class NotaItemProduto implements Serializable{
 	}
 	
 	
+
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
 
 	@Override
 	public int hashCode() {

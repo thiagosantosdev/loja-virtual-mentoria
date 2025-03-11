@@ -20,14 +20,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "vd_cp-lj-virt")
-@SequenceGenerator(name = "seq_vd_cp-lj-virt", sequenceName = "seq_vd_cp-lj-virt", initialValue = 1, allocationSize = 1)
+@Table(name = "vd_cp_lj_virt")
+@SequenceGenerator(name = "seq_vd_cp_lj_virt", sequenceName = "seq_vd_cp_lj_virt", initialValue = 1, allocationSize = 1)
 public class VendaCompraLojaVirtual implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_vd_cp-lj-virt")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_vd_cp_lj_virt")
 	private Long id;
 
 	@ManyToOne(targetEntity = PessoaFisica.class)

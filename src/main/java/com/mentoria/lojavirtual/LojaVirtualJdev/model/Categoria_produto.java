@@ -3,10 +3,14 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 @Entity
@@ -23,7 +27,21 @@ public class Categoria_produto implements Serializable {
 	@Column(name = "nome_categoria_produto", nullable = false)
 	private String nome_categ_prod;
 	
-	
+
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
+
+
+
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
+
 
 	public Long getId_categ_prod() {
 		return id_categ_prod;
