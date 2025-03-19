@@ -9,13 +9,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.ExceptionMentoriaJava;
+import com.mentoria.lojavirtual.LojaVirtualJdev.model.PessoaFisica;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.PessoaJuridica;
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.PessoaRepository;
+import com.mentoria.lojavirtual.LojaVirtualJdev.service.PessoaService;
 
 @RestController
 public class PessoaController {
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	@Autowired
+	private PessoaService pessoaservice;
 	
 	@ResponseBody
 	@PostMapping(value = "/salvarPJ")
@@ -28,10 +32,30 @@ public class PessoaController {
 		if(pessoajuridica.getId_pessoa() == null && pessoaRepository.existeCnpjCadastrado(pessoajuridica.getCnpj()) != null) {
 			throw new ExceptionMentoriaJava("Já existe CNPJ cadastrado com o número: " + pessoajuridica.getCnpj());
 		}
+		
+		pessoajuridica = pessoaservice.salvarPessoaJuridica(pessoajuridica);
+		
 		return new ResponseEntity<PessoaJuridica>(pessoajuridica, HttpStatus.OK);
 	}
 	
 	
+	
+	/*end-point é microsservicos é um API*/
+	@ResponseBody
+	@PostMapping(value = "/salvarPf")
+	public ResponseEntity<PessoaFisica> salvarPf(@RequestBody PessoaFisica pessoaFisica) throws ExceptionMentoriaJava{
+		
+		if (pessoaFisica == null) {
+			throw new ExceptionMentoriaJava("Pessoa fisica não pode ser NULL");
+		}
+		
+		
+		
+		
+		pessoaFisica = pessoaservice.salvarPessoaFisica(pessoaFisica);
+		
+		return new ResponseEntity<PessoaFisica>(pessoaFisica, HttpStatus.OK);
+	}
 	
 	
 	

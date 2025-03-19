@@ -38,6 +38,7 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 	
 
 	/*Captura execeçoes do projeto*/
+	
 	@ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class})
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {

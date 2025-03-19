@@ -50,7 +50,7 @@ public class Usuario implements UserDetails, Serializable{
 	@ManyToOne(targetEntity = PessoaFisica.class)
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private PessoaFisica pessoa;
-	
+
 	@ManyToOne(targetEntity = PessoaJuridica.class)
 	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
 	private PessoaJuridica empresa;
@@ -74,12 +74,9 @@ public class Usuario implements UserDetails, Serializable{
 	
 	
 	
-	public PessoaJuridica getEmpresa() {
-		return empresa;
-	}
-	public void setEmpresa(PessoaJuridica empresa) {
-		this.empresa = empresa;
-	}
+
+
+	
 	public Long getId_usuario() {
 		return id_usuario;
 	}
@@ -95,7 +92,9 @@ public class Usuario implements UserDetails, Serializable{
 	public PessoaFisica getPessoa() {
 		return pessoa;
 	}
-	
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
 	public List<Acesso> getAcessos() {
 		return acessos;
 	}
@@ -114,7 +113,9 @@ public class Usuario implements UserDetails, Serializable{
 	public void setPessoa(PessoaFisica pessoa) {
 		this.pessoa = pessoa;
 	}
-	
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
+	}
 	public void setAcessos(List<Acesso> acessos) {
 		this.acessos = acessos;
 	}

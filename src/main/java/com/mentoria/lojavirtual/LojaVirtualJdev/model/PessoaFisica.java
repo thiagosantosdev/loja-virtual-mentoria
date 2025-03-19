@@ -3,11 +3,7 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.model;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,9 +24,6 @@ public class PessoaFisica extends Pessoa {
 	
 	private String tipo_pessoa;
 	
-	@ManyToOne(targetEntity = PessoaJuridica.class)
-	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-	private PessoaJuridica empresa;
 
 
 	public String getCpf() {
@@ -57,13 +50,6 @@ public class PessoaFisica extends Pessoa {
 		this.tipo_pessoa = tipo_pessoa;
 	}
 
-	public PessoaJuridica getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(PessoaJuridica empresa) {
-		this.empresa = empresa;
-	}
 	
 	
 	
