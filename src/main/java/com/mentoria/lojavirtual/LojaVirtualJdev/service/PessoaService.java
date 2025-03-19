@@ -31,7 +31,7 @@ public class PessoaService {
 		
 		if(usuarioPj == null) {
 			
-			PessoaFisica pessoafisica = new PessoaFisica();
+			
 			
 			usuarioPj = new Usuario();
 			usuarioPj.setDataSenha(Calendar.getInstance().getTime());
