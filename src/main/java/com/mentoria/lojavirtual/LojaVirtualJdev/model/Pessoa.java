@@ -20,13 +20,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "tipo")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = PessoaFisica.class, name = "fisica"),
+    @JsonSubTypes.Type(value = PessoaJuridica.class, name = "juridica")
+})
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa", initialValue = 1, allocationSize = 1)
 public abstract class Pessoa implements Serializable{
 
-	
 	private static final long serialVersionUID = 1L;
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_pessoa")
@@ -41,20 +49,15 @@ public abstract class Pessoa implements Serializable{
 	@Column(nullable = false)
 	private String telefone;
 	
-	@Column(nullable = true)
+	@Column
+	private String tipoPessoa;
+	
+	@Column(nullable = false)
 	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 	
-	@ManyToOne(targetEntity = PessoaJuridica.class)
-	@JoinColumn(name = "empresa_id", nullable = true, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-	private PessoaJuridica empresa;
 	
-	public PessoaJuridica getEmpresa() {
-		return empresa;
-	}
-	public void setEmpresa(PessoaJuridica empresa) {
-		this.empresa = empresa;
-	}
+
 	public Long getId_pessoa() {
 		return id_pessoa;
 	}
@@ -67,9 +70,13 @@ public abstract class Pessoa implements Serializable{
 	public String getTelefone() {
 		return telefone;
 	}
+	public String getTipoPessoa() {
+		return tipoPessoa;
+	}
 	public List<Endereco> getEnderecos() {
 		return enderecos;
 	}
+	
 	public void setId_pessoa(Long id_pessoa) {
 		this.id_pessoa = id_pessoa;
 	}
@@ -82,9 +89,13 @@ public abstract class Pessoa implements Serializable{
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
+	public void setTipoPessoa(String tipoPessoa) {
+		this.tipoPessoa = tipoPessoa;
+	}
 	public void setEnderecos(List<Endereco> enderecos) {
 		this.enderecos = enderecos;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

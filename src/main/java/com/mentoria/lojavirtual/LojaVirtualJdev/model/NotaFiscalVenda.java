@@ -46,63 +46,93 @@ public class NotaFiscalVenda implements Serializable{
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "venda_compra_loja_virt_id_fk"))
 	private VendaCompraLojaVirtual vd_cp_lj_virt;
 	
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
+
 	
+	
+	
+	public Long getId_nota_fiscal_venda() {
+		return id_nota_fiscal_venda;
+	}
+
+
+	public String getNumero() {
+		return numero;
+	}
+
+
+	public String getSerie() {
+		return serie;
+	}
+
+
+	public String getTipo() {
+		return tipo;
+	}
+
+
+	public String getXml() {
+		return xml;
+	}
+
+
+	public String getPdf() {
+		return pdf;
+	}
+
+
 	public VendaCompraLojaVirtual getVd_cp_lj_virt() {
 		return vd_cp_lj_virt;
 	}
+
+
 	public PessoaJuridica getEmpresa() {
 		return empresa;
 	}
+
+
+	public void setId_nota_fiscal_venda(Long id_nota_fiscal_venda) {
+		this.id_nota_fiscal_venda = id_nota_fiscal_venda;
+	}
+
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+
+	public void setXml(String xml) {
+		this.xml = xml;
+	}
+
+
+	public void setPdf(String pdf) {
+		this.pdf = pdf;
+	}
+
+
 	public void setVd_cp_lj_virt(VendaCompraLojaVirtual vd_cp_lj_virt) {
 		this.vd_cp_lj_virt = vd_cp_lj_virt;
 	}
+
+
 	public void setEmpresa(PessoaJuridica empresa) {
 		this.empresa = empresa;
 	}
 
 
-	@ManyToOne(targetEntity = PessoaJuridica.class)
-	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-	private PessoaJuridica empresa;
-
-	public Long getId_nota_fiscal_venda() {
-		return id_nota_fiscal_venda;
-	}
-	public String getNumero() {
-		return numero;
-	}
-	public String getSerie() {
-		return serie;
-	}
-	public String getTipo() {
-		return tipo;
-	}
-	public String getXml() {
-		return xml;
-	}
-	public String getPdf() {
-		return pdf;
-	}
-	public void setId_nota_fiscal_venda(Long id_nota_fiscal_venda) {
-		this.id_nota_fiscal_venda = id_nota_fiscal_venda;
-	}
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
-	public void setSerie(String serie) {
-		this.serie = serie;
-	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-	public void setXml(String xml) {
-		this.xml = xml;
-	}
-	public void setPdf(String pdf) {
-		this.pdf = pdf;
-	}
-	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

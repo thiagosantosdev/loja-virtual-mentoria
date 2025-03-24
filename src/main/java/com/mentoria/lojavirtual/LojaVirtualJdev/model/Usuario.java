@@ -47,13 +47,16 @@ public class Usuario implements UserDetails, Serializable{
 	@Temporal(TemporalType.DATE)
 	private Date dataSenha;
 	
-	@ManyToOne(targetEntity = PessoaFisica.class)
-	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
-	private PessoaFisica pessoa;
+	@ManyToOne(targetEntity = Pessoa.class)
+	@JoinColumn(name = "pessoa_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
+	private Pessoa pessoa;
 
-	@ManyToOne(targetEntity = PessoaJuridica.class)
-	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-	private PessoaJuridica empresa;
+	@ManyToOne(targetEntity = Pessoa.class)
+	@JoinColumn(name = "empresa_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa;
+
 
 	
 
@@ -77,6 +80,8 @@ public class Usuario implements UserDetails, Serializable{
 
 
 	
+	
+	
 	public Long getId_usuario() {
 		return id_usuario;
 	}
@@ -89,10 +94,10 @@ public class Usuario implements UserDetails, Serializable{
 	public Date getDataSenha() {
 		return dataSenha;
 	}
-	public PessoaFisica getPessoa() {
+	public Pessoa getPessoa() {
 		return pessoa;
 	}
-	public PessoaJuridica getEmpresa() {
+	public Pessoa getEmpresa() {
 		return empresa;
 	}
 	public List<Acesso> getAcessos() {
@@ -110,10 +115,10 @@ public class Usuario implements UserDetails, Serializable{
 	public void setDataSenha(Date dataSenha) {
 		this.dataSenha = dataSenha;
 	}
-	public void setPessoa(PessoaFisica pessoa) {
+	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
 	}
-	public void setEmpresa(PessoaJuridica empresa) {
+	public void setEmpresa(Pessoa empresa) {
 		this.empresa = empresa;
 	}
 	public void setAcessos(List<Acesso> acessos) {
@@ -158,5 +163,6 @@ public class Usuario implements UserDetails, Serializable{
         
     	return true;
     }
+	
 	
 }

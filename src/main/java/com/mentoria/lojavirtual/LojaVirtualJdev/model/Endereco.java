@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mentoria.lojavirtual.LojaVirtualJdev.enums.TipoEndereco;
 
 @Entity
@@ -46,107 +49,109 @@ public class Endereco implements Serializable {
 
 	@Column(nullable = false)
 	private String cidade;
-
-	@ManyToOne(targetEntity = PessoaFisica.class)
+	
+	@JsonIgnore
+	@ManyToOne(targetEntity = Pessoa.class)
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
-	private PessoaFisica pessoa;
+	private Pessoa pessoa;
 
-	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JsonIgnore
+	@ManyToOne(targetEntity = Pessoa.class)
 	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-	private PessoaJuridica empresa;
+	private Pessoa empresa;
 
 	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
 	private TipoEndereco tipoEndereco;
 
-	public TipoEndereco getTipoEndereco() {
-		return tipoEndereco;
-	}
 
-	public void setTipoEndereco(TipoEndereco tipoEndereco) {
-		this.tipoEndereco = tipoEndereco;
-	}
 
 	public Long getId_endereco() {
 		return id_endereco;
-	}
-
-	public void setId_endereco(Long id_endereco) {
-		this.id_endereco = id_endereco;
 	}
 
 	public String getRuaLogradouro() {
 		return ruaLogradouro;
 	}
 
-	public void setRuaLogradouro(String ruaLogradouro) {
-		this.ruaLogradouro = ruaLogradouro;
-	}
-
 	public String getCep() {
 		return cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
 	}
 
 	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
-
 	public String getComplemento() {
 		return complemento;
-	}
-
-	public void setComplemento(String complemento) {
-		this.complemento = complemento;
 	}
 
 	public String getBairro() {
 		return bairro;
 	}
 
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-
 	public String getUf() {
 		return uf;
-	}
-
-	public void setUf(String uf) {
-		this.uf = uf;
 	}
 
 	public String getCidade() {
 		return cidade;
 	}
 
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+
+	public Pessoa getEmpresa() {
+		return empresa;
+	}
+
+	public TipoEndereco getTipoEndereco() {
+		return tipoEndereco;
+	}
+
+	public void setId_endereco(Long id_endereco) {
+		this.id_endereco = id_endereco;
+	}
+
+	public void setRuaLogradouro(String ruaLogradouro) {
+		this.ruaLogradouro = ruaLogradouro;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public void setUf(String uf) {
+		this.uf = uf;
+	}
+
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
 
-	
-	
-
-	public PessoaFisica getPessoa() {
-		return pessoa;
-	}
-
-	public PessoaJuridica getEmpresa() {
-		return empresa;
-	}
-
-	public void setPessoa(PessoaFisica pessoa) {
+	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
 	}
 
-	public void setEmpresa(PessoaJuridica empresa) {
+	public void setEmpresa(Pessoa empresa) {
 		this.empresa = empresa;
+	}
+
+	public void setTipoEndereco(TipoEndereco tipoEndereco) {
+		this.tipoEndereco = tipoEndereco;
 	}
 
 	@Override

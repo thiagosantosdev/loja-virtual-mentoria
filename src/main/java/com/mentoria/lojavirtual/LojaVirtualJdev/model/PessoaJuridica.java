@@ -1,12 +1,18 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev.model;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "pessoa_juridica")
-public class PessoaJuridica extends Pessoa {
+@PrimaryKeyJoinColumn(name = "id_pessoa")
+public class PessoaJuridica extends Pessoa  {
 
 	
 		private static final long serialVersionUID = 1L;
@@ -17,7 +23,6 @@ public class PessoaJuridica extends Pessoa {
 		@Column(nullable = false)
 		private String insc_estadual;
 		
-
 		private String insc_municipal;
 		
 		@Column(nullable = false)
@@ -28,13 +33,19 @@ public class PessoaJuridica extends Pessoa {
 		
 		private String categoria;
 		
-		/*
-		@ManyToOne(targetEntity = PessoaJuridica.class)
+		@ManyToOne(targetEntity = Pessoa.class)
 		@JoinColumn(name = "empresa_id", nullable = true, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-		private PessoaJuridica empresa;
-*/
+		private Pessoa empresa;
+		
+		
 
-	
+		public Pessoa getEmpresa() {
+			return empresa;
+		}
+
+		public void setEmpresa(Pessoa empresa) {
+			this.empresa = empresa;
+		}
 
 		public String getCnpj() {
 			return cnpj;

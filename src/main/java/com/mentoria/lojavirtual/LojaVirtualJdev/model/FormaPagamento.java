@@ -3,10 +3,14 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -24,10 +28,20 @@ public class FormaPagamento implements Serializable{
 	@Column(nullable = false)
 	private String descricao;
 	
-	
+
+	@ManyToOne(targetEntity = PessoaJuridica.class)
+	@JoinColumn(name = "empresa_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private PessoaJuridica empresa;
 	
 	public Long getId_form_pag() {
 		return id_form_pag;
+	}
+	public PessoaJuridica getEmpresa() {
+		return empresa;
+	}
+	public void setEmpresa(PessoaJuridica empresa) {
+		this.empresa = empresa;
 	}
 	public void setId_form_pag(Long id_form_pag) {
 		this.id_form_pag = id_form_pag;

@@ -8,4 +8,6 @@ import com.mentoria.lojavirtual.LojaVirtualJdev.model.PessoaFisica;
 @Repository
 public interface PessoaFisicaRepository extends CrudRepository<PessoaFisica, Long>{
 
+	
+	
 }

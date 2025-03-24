@@ -25,8 +25,16 @@ public class PessoaService {
 	
 	public PessoaJuridica salvarPessoaJuridica(PessoaJuridica pessoajuridica) {
 		
+		
+		for (int i = 0; i< pessoajuridica.getEnderecos().size(); i++) {
+			pessoajuridica.getEnderecos().get(i).setPessoa(pessoajuridica);
+			pessoajuridica.getEnderecos().get(i).setEmpresa(pessoajuridica);
+		}
+		
+		
 		pessoajuridica = pessoaRepository.save(pessoajuridica);
 		
+
 		Usuario usuarioPj = usuarioRepository.findUserByPessoa(pessoajuridica.getId_pessoa(), pessoajuridica.getEmail());
 		
 		if(usuarioPj == null) {
@@ -38,14 +46,16 @@ public class PessoaService {
 			usuarioPj.setPessoa(pessoajuridica);
 			usuarioPj.setEmpresa(pessoajuridica);
 			usuarioPj.setLogin(pessoajuridica.getEmail());
+			
 			String senha = "" + Calendar.getInstance().getTimeInMillis();
 			String senhaCript = new BCryptPasswordEncoder().encode(senha);
 			
 			usuarioPj.setSenha(senhaCript);
 			usuarioPj = usuarioRepository.save(usuarioPj);
 			
-			usuarioRepository.insereAcessoUserPj(usuarioPj.getId_usuario());
-			
+			usuarioRepository.insereAcessoUser(usuarioPj.getId_usuario());
+			usuarioRepository.insereAcessoUserPj(usuarioPj.getId_usuario(), "ROLE_ADMIN");
+			                                                           
 		}
 		
 		return pessoajuridica;
@@ -54,12 +64,21 @@ public class PessoaService {
 
 	public PessoaFisica salvarPessoaFisica(PessoaFisica pessoaFisica) {
 		
-			pessoaFisica = pessoaFisicaRepository.save(pessoaFisica);
+		
+		
+		
+		for (int i = 0; i< pessoaFisica.getEnderecos().size(); i++) {
+			pessoaFisica.getEnderecos().get(i).setPessoa(pessoaFisica);
+			pessoaFisica.getEnderecos().get(i).setEmpresa(pessoaFisica);
+		}
+		
+		pessoaFisica = pessoaFisicaRepository.save(pessoaFisica);
 
-			Usuario usuarioPj = usuarioRepository.findUserByPessoa(pessoaFisica.getId_pessoa(), pessoaFisica.getEmail());
-			
-			if (usuarioPj == null) {
-				
+	
+		Usuario usuarioPj = usuarioRepository.findUserByPessoa(pessoaFisica.getId_pessoa(), pessoaFisica.getEmail());
+
+		
+		if (usuarioPj == null) {
 				
 				
 				usuarioPj = new Usuario();
@@ -76,6 +95,7 @@ public class PessoaService {
 				usuarioPj = usuarioRepository.save(usuarioPj);
 				
 				usuarioRepository.insereAcessoUser(usuarioPj.getId_usuario());
+				
 					}
 			
 			return pessoaFisica;
