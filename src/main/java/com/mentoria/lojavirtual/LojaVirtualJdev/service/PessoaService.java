@@ -21,7 +21,8 @@ public class PessoaService {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private PessoaFisicaRepository pessoaFisicaRepository;
-	
+	@Autowired
+	private ServiceSendEmail serviceSendEmail;
 	
 	public PessoaJuridica salvarPessoaJuridica(PessoaJuridica pessoajuridica) {
 		
@@ -53,10 +54,25 @@ public class PessoaService {
 			usuarioPj.setSenha(senhaCript);
 			usuarioPj = usuarioRepository.save(usuarioPj);
 			
-			usuarioRepository.insereAcessoUser(usuarioPj.getId_usuario());
+		
 			usuarioRepository.insereAcessoUserPj(usuarioPj.getId_usuario(), "ROLE_ADMIN");
-			                                                           
-		}
+			
+			// Envio e-mail login e senha
+						StringBuilder mensagemHtml = new StringBuilder();
+						mensagemHtml.append("<b>Segue abaixo seus dados de acesso Pessoa Jurídica para a loja virtual:</b><br/><br/>");
+						mensagemHtml.append("<b>Login:</b> " + pessoajuridica.getEmail() + "<br/>");
+						mensagemHtml.append("<b>Senha:</b> ").append(senha).append("<br/><br/>");
+						mensagemHtml.append("<b>Muito obrigado!</b>");
+						try {
+							serviceSendEmail.enviarEmailHtml(
+								"Acesso gerado para Loja Virtual",
+								mensagemHtml.toString(),
+								pessoajuridica.getEmail()
+							);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 		
 		return pessoajuridica;
 	}
