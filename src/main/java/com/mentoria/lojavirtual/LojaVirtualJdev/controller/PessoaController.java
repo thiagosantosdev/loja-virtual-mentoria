@@ -33,6 +33,10 @@ public class PessoaController {
 			throw new ExceptionMentoriaJava("Já existe CNPJ cadastrado com o número: " + pessoajuridica.getCnpj());
 		}
 		
+		if(pessoajuridica.getId_pessoa() == null && pessoaRepository.existeInscEstadual(pessoajuridica.getInsc_estadual()) != null) {
+			throw new ExceptionMentoriaJava("Já existe inscrição estadual cadastrada com o número: " + pessoajuridica.getInsc_estadual());
+		}
+		
 		pessoajuridica = pessoaservice.salvarPessoaJuridica(pessoajuridica);
 		
 		return new ResponseEntity<PessoaJuridica>(pessoajuridica, HttpStatus.OK);

@@ -1,5 +1,7 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +13,9 @@ import com.mentoria.lojavirtual.LojaVirtualJdev.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
+	
+	@Query("select u from Usuario u where u.dataSenha <= current_date - 90")
+	List<Usuario> usuarioSenhaVencida();
 
 	@Query(value = "select u from Usuario u where u.login = ?1")
 	Usuario findUserByLogin(String login);
