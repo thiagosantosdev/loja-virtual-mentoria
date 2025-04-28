@@ -85,7 +85,7 @@ public class PessoaService {
 		
 		for (int i = 0; i< pessoaFisica.getEnderecos().size(); i++) {
 			pessoaFisica.getEnderecos().get(i).setPessoa(pessoaFisica);
-			pessoaFisica.getEnderecos().get(i).setEmpresa(pessoaFisica);
+			pessoaFisica.getEnderecos().get(i).setEmpresa(pessoaFisica.getEmpresa());
 		}
 		
 		pessoaFisica = pessoaFisicaRepository.save(pessoaFisica);
@@ -112,7 +112,23 @@ public class PessoaService {
 				
 				usuarioRepository.insereAcessoUser(usuarioPj.getId_usuario());
 				
-					}
+				StringBuilder menssagemHtml = new StringBuilder();
+				
+				menssagemHtml.append("<b>Segue abaixo seus dados de acesso para a loja virtual</b><br/>");
+				menssagemHtml.append("<b>Login: </b>"+pessoaFisica.getEmail()+"<br/>");
+				menssagemHtml.append("<b>Senha: </b>").append(senha).append("<br/><br/>");
+				menssagemHtml.append("Obrigado!");
+				
+				
+				try {
+				  serviceSendEmail.enviarEmailHtml("Acesso Gerado para Loja Virtual", menssagemHtml.toString() , pessoaFisica.getEmail());
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+				
+					
 			
 			return pessoaFisica;
 		}

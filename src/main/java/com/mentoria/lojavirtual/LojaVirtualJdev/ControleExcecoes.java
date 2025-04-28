@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,14 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.dto.ObjetoErroDTO;
+import com.mentoria.lojavirtual.LojaVirtualJdev.service.ServiceSendEmail;
 
 @RestControllerAdvice
 @ControllerAdvice
 public class ControleExcecoes extends ResponseEntityExceptionHandler{
 	
+	@Autowired
+	private ServiceSendEmail serviceSendEmail;
 	
 	@ExceptionHandler(ExceptionMentoriaJava.class)
 	public ResponseEntity<Object> handleExceptionCustom (ExceptionMentoriaJava ex) {
@@ -67,6 +71,8 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 		objetoErroDTO.setCode(status.value() + " ==> " + status.getReasonPhrase()); 
 		
 		ex.printStackTrace();
+		
+		
 		
 		return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 	
