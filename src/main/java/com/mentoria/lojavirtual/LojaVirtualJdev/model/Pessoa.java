@@ -15,6 +15,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -49,6 +50,7 @@ public abstract class Pessoa implements Serializable{
 	@Column(nullable = false)
 	private String nome_pessoa;
 	
+	@Email(message = "Formato de e-mail inválido!")
 	@Column(nullable = false)
 	private String email;
 

@@ -1,12 +1,16 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev;
 
-import java.net.http.HttpHeaders;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,7 +27,7 @@ import com.mentoria.lojavirtual.LojaVirtualJdev.service.ServiceSendEmail;
 
 @RestControllerAdvice
 @ControllerAdvice
-public class ControleExcecoes extends ResponseEntityExceptionHandler{
+public class ControleExcecoes extends ResponseEntityExceptionHandler {
 	
 	@Autowired
 	private ServiceSendEmail serviceSendEmail;
@@ -40,10 +44,10 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 	}
 	
 	
-
-	/*Captura execeçoes do projeto*/
 	
+	/*Captura execeçoes do projeto*/
 	@ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class})
+	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		
@@ -72,13 +76,19 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 		
 		ex.printStackTrace();
 		
-		
+		try {
+			
+			serviceSendEmail.enviarEmailHtml("Erro na loja virtual", 
+					ExceptionUtils.getStackTrace(ex),
+					"thiagosantosjss@gmail.com");
+			
+		} catch (UnsupportedEncodingException | MessagingException e) {
+			e.printStackTrace();
+		}
 		
 		return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
-	
-	
-}
 	
 	/*Captura erro na parte de banco*/
 	@ExceptionHandler({DataIntegrityViolationException.class, 
@@ -106,10 +116,20 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler{
 		
 		ex.printStackTrace();
 		
+		
+		try {
+			
+			serviceSendEmail.enviarEmailHtml("Erro na loja virtual", 
+					ExceptionUtils.getStackTrace(ex),
+					"alex.fernando.egidio@gmail.com");
+			
+		} catch (UnsupportedEncodingException | MessagingException e) {
+			e.printStackTrace();
+		}
+		
 		return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		
+	}
 	
-	
-}
 
-	
 }
