@@ -29,12 +29,42 @@ public class CategoriaProdutoController {
 	        throw new ExceptionMentoriaJava("A empresa deve ser informada!");
 	    }
 	    
+	  
+	    
+	    if (categoriaProduto.getId_categ_prod() == null) {
+	    	
+	    	List<CategoriaProduto> categorias = categoriaProdutoRepository.existeCategoria(categoriaProduto.getNome_categ_prod().toUpperCase(),categoriaProduto.getEmpresa().getId_pessoa());
+	    	 
+	        
+	    	if(!categorias.isEmpty()) {
+	    		throw new ExceptionMentoriaJava("Não pode cadastrar categoria com mesmo nome.");
+	    	}
+	    }
+	   
+	
+	    CategoriaProduto categoriaSalva = categoriaProdutoRepository.save(categoriaProduto);
+
+	    return new ResponseEntity<>(categoriaSalva, HttpStatus.OK);
+	}
+	
+	/*
+	 @PostMapping(value = "/salvarCategoria")
+	public ResponseEntity<CategoriaProduto> salvarCategoria(@RequestBody CategoriaProduto categoriaProduto) throws ExceptionMentoriaJava {
+	    
+	    if (categoriaProduto.getEmpresa() == null || (categoriaProduto.getEmpresa().getId_pessoa() == null)) {
+	        throw new ExceptionMentoriaJava("A empresa deve ser informada!");
+	    }
+	    
 	    // Aplica trim no nome da categoria antes de verificar a existência
 	    String nomeCategoriaTrim = categoriaProduto.getNome_categ_prod() != null ? categoriaProduto.getNome_categ_prod().trim() : null;
 	    
-	    if (categoriaProduto.getId_categ_prod() == null && categoriaProdutoRepository.existeCategoria(nomeCategoriaTrim)){
+	    if (categoriaProduto.getId_categ_prod() == null && categoriaProdutoRepository.existeCategoria2(nomeCategoriaTrim)){
 	        throw new ExceptionMentoriaJava("Não pode cadastrar categoria com mesmo nome.");
 	    }
+	   
+	   
+	    
+	    
 
 	    // Atualiza o nome sem espaços e salva
 	    categoriaProduto.setNome_categ_prod(nomeCategoriaTrim);
@@ -42,8 +72,10 @@ public class CategoriaProdutoController {
 
 	    return new ResponseEntity<>(categoriaSalva, HttpStatus.OK);
 	}
-	
-	
+	 
+	 
+	 
+	 */
 
 	@DeleteMapping(value = "/deleteCategoria/{id_categ_prod}", produces = "application/text")
 	public String delete(@PathVariable("id_categ_prod") Long id_categ_prod) {
