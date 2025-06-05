@@ -93,6 +93,7 @@ public class Produto implements Serializable{
 	@ManyToOne(targetEntity = MarcaProduto.class)
 	@JoinColumn(name = "id_marca_prod", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "marca_prod_id_fk"))
 	private MarcaProduto marcaProduto;
+	
 
 	
 	public Long getId_produto() {

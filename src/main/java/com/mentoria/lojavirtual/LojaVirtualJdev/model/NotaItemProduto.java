@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+
 
 @Entity
 @Table(name = "nota_item_produto")
@@ -25,6 +27,7 @@ public class NotaItemProduto implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_nota_item_produto")
 	private Long idNotaItemProd;
 	
+	@Min(value = 1, message = "A quantidade mínima permitida é 5!")
 	@Column(nullable = false)
 	private Double quantidade;
 	
@@ -38,6 +41,7 @@ public class NotaItemProduto implements Serializable{
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_fiscal_compra_fk"))
 	private NotaFiscalCompra nota_fiscal_compra;
 	
+
 	
 
 	@ManyToOne(targetEntity = PessoaJuridica.class)

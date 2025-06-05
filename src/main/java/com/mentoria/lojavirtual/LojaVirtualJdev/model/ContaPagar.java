@@ -19,6 +19,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.enums.StatusContaPagar;
 
@@ -27,19 +29,24 @@ import com.mentoria.lojavirtual.LojaVirtualJdev.enums.StatusContaPagar;
 @SequenceGenerator(name = "seq_conta_pagar", sequenceName = "seq_conta_pagar", allocationSize = 1, initialValue = 1)
 public class ContaPagar implements Serializable {
 
+	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_conta_pagar")
 	private Long id_conta_pagar;
 
+	@NotNull(message = "Informe o campo DESCRIÇÃO da conta a pagar!")
 	@Column(nullable = false)
 	private String descricao;
 
+	@NotNull(message = "Informe o STATUS da conta a pagar!")
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private StatusContaPagar status;
 
+	@NotNull(message = "Informe a DATA DE VENCIMENTO da conta a pagar!")
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data_vencimento;
@@ -47,6 +54,7 @@ public class ContaPagar implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date data_pagamento;
 
+	@NotNull(message = "Informe o valor total da conta a pagar!")
 	@Column(nullable = false)
 	private BigDecimal valor_total;
 
@@ -141,6 +149,14 @@ public class ContaPagar implements Serializable {
 		this.empresa = empresa;
 	}
 
+	public PessoaJuridica getPessoa_fornecedor() {
+		return pessoa_fornecedor;
+	}
+
+	public void setPessoa_fornecedor(PessoaJuridica pessoa_fornecedor) {
+		this.pessoa_fornecedor = pessoa_fornecedor;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
