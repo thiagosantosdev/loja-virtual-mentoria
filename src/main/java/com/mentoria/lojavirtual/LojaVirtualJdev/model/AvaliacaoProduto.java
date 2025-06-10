@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "avaliacao_produto")
@@ -25,9 +28,12 @@ public class AvaliacaoProduto implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_avaliacao_produto")
 	private Long id_avaliacao_produto;
 	
+	@NotEmpty(message = "Informe uma descrição para a avaliação!")
 	@Column(nullable = false)
 	private String descricao;
 	
+	@Min(value = 1, message = "A nota deve ser no mínimo 1!")
+	@Max(value = 10, message = "A nota deve ser no máximo 10!")
 	@Column(nullable = false)
 	private Integer nota;
 	
