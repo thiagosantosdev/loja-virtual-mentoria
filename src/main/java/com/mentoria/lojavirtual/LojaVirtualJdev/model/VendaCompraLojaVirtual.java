@@ -22,6 +22,9 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "vd_cp_lj_virt")
 @SequenceGenerator(name = "seq_vd_cp_lj_virt", sequenceName = "seq_vd_cp_lj_virt", initialValue = 1, allocationSize = 1)
@@ -63,9 +66,10 @@ public class VendaCompraLojaVirtual implements Serializable {
 	@JoinColumn(name = "forma_pagamento_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "forma_pagamento_fk"))
 	private FormaPagamento forma_pagamento;
 
-	@NotNull(message = "A nota fiscal deve ser informada!")
+	@JsonIgnoreProperties(allowGetters = true)
+	//@NotNull(message = "A nota fiscal deve ser informada!")
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "nota_fiscal_venda_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_fiscal_venda_fk"))
+	@JoinColumn(name = "nota_fiscal_venda_id", nullable = true, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_fiscal_venda_fk"))
 	private NotaFiscalVenda nota_fiscal_venda;
 
 	@ManyToOne
