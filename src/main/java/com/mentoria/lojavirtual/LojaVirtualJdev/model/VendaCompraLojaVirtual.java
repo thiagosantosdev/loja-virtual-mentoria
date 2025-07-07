@@ -2,18 +2,22 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -22,7 +26,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -55,7 +58,7 @@ public class VendaCompraLojaVirtual implements Serializable {
 	@JoinColumn(name = "endereco_cobranca_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "endereco_cobranca_fk"))
 	private Endereco endereco_cobranca;
 
-	@Min(value = 1, message = "Valor total da venda é inválido!")
+	//@Min(value = 1, message = "Valor total da venda é inválido!")
 	@Column(nullable = false)
 	private BigDecimal valor_total;
 
@@ -94,7 +97,11 @@ public class VendaCompraLojaVirtual implements Serializable {
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data_entrega;
-
+	
+	@OneToMany(mappedBy = "vd_cp_lj_virt", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<ItemVendaLoja> itemVendaLoja = new ArrayList<ItemVendaLoja>(); 
+	
+	
 	public PessoaFisica getPessoa() {
 		return pessoa;
 	}
@@ -205,6 +212,14 @@ public class VendaCompraLojaVirtual implements Serializable {
 
 	public void setData_entrega(Date data_entrega) {
 		this.data_entrega = data_entrega;
+	}
+
+	public List<ItemVendaLoja> getItemVendaLoja() {
+		return itemVendaLoja;
+	}
+
+	public void setItemVendaLoja(List<ItemVendaLoja> itemVendaLoja) {
+		this.itemVendaLoja = itemVendaLoja;
 	}
 
 	@Override
