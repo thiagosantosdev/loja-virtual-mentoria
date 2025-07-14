@@ -2,8 +2,8 @@ package com.mentoria.lojavirtual.LojaVirtualJdev.service;
 
 import java.sql.SQLException;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.VendaCompraLojaVirtualRepository;
@@ -19,8 +19,22 @@ public class VendaService {
 	@Autowired
 	private VendaCompraLojaVirtualRepository vendaCompraLojaVirtualRepository;
 
+	
+	
+	public void exclusaoLogica(Long id) {
+		String sql = "begin; update vd_cp_lj_virt set excluido = true where id = " + id + "; commit;";
+		jdbcTemplate.execute(sql);;
+	}
+	
+	public void ativaVendaLogica(Long id) {
+		String sql = "begin; update vd_cp_lj_virt set excluido = false where id = " + id + "; commit;";
+		jdbcTemplate.execute(sql);;
+	}
+	
+	
 	public void exclusaoTotalVendaBanco(Long id) throws SQLException {
 		
+	
 		String value = 
                 " begin;"
     			+ " UPDATE nota_fiscal_venda set venda_compra_loja_virt_id = null where venda_compra_loja_virt_id = "+id+"; "
