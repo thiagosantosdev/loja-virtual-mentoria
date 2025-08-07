@@ -1,11 +1,16 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev.service;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.mentoria.lojavirtual.LojaVirtualJdev.model.VendaCompraLojaVirtual;
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.VendaCompraLojaVirtualRepository;
 
 @Service
@@ -55,5 +60,18 @@ jdbcTemplate.execute(value);
 		
 		
 	}
+
+	public List<VendaCompraLojaVirtual> consultaVendaFaixaData(String data1, String data2) throws ParseException {
+
+
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date date1 = dateFormat.parse(data1);
+		Date date2 = dateFormat.parse(data2);
+		
+		
+		return vendaCompraLojaVirtualRepository.consultaVendaFaixaData(date1, date2);
+		
+	} 
 
 }
