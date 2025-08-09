@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "status_rastreio")
 @SequenceGenerator(name = "seq_status_rastreio", sequenceName = "seq_status_rastreio", initialValue = 1, allocationSize = 1)
@@ -29,12 +31,13 @@ public class StatusRastreio implements Serializable{
 	private String estado;
 	private String status;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "venda_compra_loja_virt_id", nullable = false, 
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "venda_compra_loja_virt_id_fk"))
 	private VendaCompraLojaVirtual vd_cp_lj_virt;
 	
-
+	@JsonIgnore
 	@ManyToOne(targetEntity = PessoaJuridica.class)
 	@JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
 	private PessoaJuridica empresa;
