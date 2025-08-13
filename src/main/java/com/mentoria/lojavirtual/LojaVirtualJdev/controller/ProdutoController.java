@@ -43,6 +43,12 @@ public class ProdutoController {
 		if (produto.getEmpresa() == null || produto.getEmpresa().getId_pessoa() == null) {
 			throw new ExceptionMentoriaJava("Empresa deve ser informada!");
 		}
+		
+		if(produto.getNome().length() < 10) {
+			throw new ExceptionMentoriaJava("O nome do produto deve ter no MÍNIMO 10 caracteres!");
+
+		}
+		
 		if (produto.getTipo_unidade() == null || produto.getTipo_unidade().trim().isEmpty()) {
 			throw new ExceptionMentoriaJava("Tipo da unidade deve ser informada!");
 		}

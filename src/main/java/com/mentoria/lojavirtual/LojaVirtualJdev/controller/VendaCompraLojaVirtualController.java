@@ -1,10 +1,13 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.ExceptionMentoriaJava;
+import com.mentoria.lojavirtual.LojaVirtualJdev.enums.StatusContaReceber;
+import com.mentoria.lojavirtual.LojaVirtualJdev.model.ContaReceber;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.Endereco;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.ItemVendaLoja;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.PessoaFisica;
@@ -26,10 +31,12 @@ import com.mentoria.lojavirtual.LojaVirtualJdev.model.StatusRastreio;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.VendaCompraLojaVirtual;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.dto.ItemVendaDTO;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.dto.VendaCompraLojaVirtualDTO;
+import com.mentoria.lojavirtual.LojaVirtualJdev.repository.ContaReceberRepository;
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.EnderecoRepository;
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.NotaFiscalVendaRepository;
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.StatusRastreioRepository;
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.VendaCompraLojaVirtualRepository;
+import com.mentoria.lojavirtual.LojaVirtualJdev.service.ServiceSendEmail;
 import com.mentoria.lojavirtual.LojaVirtualJdev.service.VendaService;
 
 @RestController
@@ -53,9 +60,15 @@ public class VendaCompraLojaVirtualController {
 	@Autowired
 	private VendaService vendaService;
 
+	@Autowired
+	private ContaReceberRepository contaReceberRepository;
+	
+	@Autowired
+	private ServiceSendEmail serviceSendEmail;
+	
 	@PostMapping(value = "/salvarVenda")
 	public ResponseEntity<VendaCompraLojaVirtualDTO> salvarVenda(
-			@Valid @RequestBody VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava {
+			@Valid @RequestBody VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava, UnsupportedEncodingException, MessagingException {
 
 		vendaCompraLojaVirtual.getPessoa().setEmpresa(vendaCompraLojaVirtual.getEmpresa());
 		PessoaFisica pessoaFisica = pessoaController.salvarPf(vendaCompraLojaVirtual.getPessoa()).getBody();
@@ -117,6 +130,31 @@ public class VendaCompraLojaVirtualController {
 			compraLojaVirtualDTO.getItemVendaLoja().add(itemVendaDTO);
 		}
 
+		ContaReceber contaReceber = new ContaReceber();
+		contaReceber.setDescricao("Venda da loja virtual nº: " + vendaCompraLojaVirtual.getId());
+		contaReceber.setData_pagamento(Calendar.getInstance().getTime());
+		contaReceber.setData_vencimento(Calendar.getInstance().getTime());
+		contaReceber.setEmpresa(vendaCompraLojaVirtual.getEmpresa());
+		contaReceber.setPessoa(vendaCompraLojaVirtual.getPessoa());
+		contaReceber.setStatus(StatusContaReceber.QUITADA);
+		contaReceber.setValor_desc(vendaCompraLojaVirtual.getValor_desc());
+		contaReceber.setValor_total(vendaCompraLojaVirtual.getValor_total());
+		
+		contaReceberRepository.saveAndFlush(contaReceber);
+		/*Envia email para o cliente depois da compra confirmada*/
+		StringBuilder msgemail = new StringBuilder();
+		msgemail.append("Olá, ").append(pessoaFisica.getNome_pessoa()).append("</br>");
+		msgemail.append("Você realizou a compra de nº: ").append(vendaCompraLojaVirtual.getId()).append("</br>");
+		msgemail.append("Na loja ").append(vendaCompraLojaVirtual.getEmpresa().getNome_fantasia());
+		/*assunto, mensagem, destino*/
+		serviceSendEmail.enviarEmailHtml("Compra realizada", msgemail.toString(), pessoaFisica.getEmail());
+		
+		/*Envia email para o dono da loja informando da venda*/
+		msgemail = new StringBuilder();
+		msgemail.append("Você realizou uma venda nº ").append(vendaCompraLojaVirtual.getId());
+		serviceSendEmail.enviarEmailHtml("Venda realizada", msgemail.toString(), vendaCompraLojaVirtual.getEmpresa().getEmail());
+
+		
 		return new ResponseEntity<VendaCompraLojaVirtualDTO>(compraLojaVirtualDTO, HttpStatus.OK);
 	}
 
