@@ -17,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "cupom_desc")
@@ -29,6 +30,7 @@ public class CupomDesc implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cupom_desc")
 	private Long id_cupom_desc;
 	
+	@NotEmpty(message = "Informe o código do desconto")
 	@Column(nullable = false)
 	private String cod_desc;
 	
@@ -36,6 +38,7 @@ public class CupomDesc implements Serializable{
 	
 	private BigDecimal valor_porcent;
 	
+	@NotEmpty(message = "Informe a data de validade do CUPOM")
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date data_validade;

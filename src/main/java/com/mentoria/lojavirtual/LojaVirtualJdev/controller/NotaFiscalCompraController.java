@@ -1,5 +1,6 @@
 package com.mentoria.lojavirtual.LojaVirtualJdev.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -16,13 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.ExceptionMentoriaJava;
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.NotaFiscalCompra;
+import com.mentoria.lojavirtual.LojaVirtualJdev.model.dto.ObjetoRequisicaoRelatorioProdCompraNotaFiscalDTO;
 import com.mentoria.lojavirtual.LojaVirtualJdev.repository.NotaFiscalCompraRepository;
+import com.mentoria.lojavirtual.LojaVirtualJdev.service.NotaFiscalCompraService;
 
 @RestController
 public class NotaFiscalCompraController {
 	
 	@Autowired
 	private NotaFiscalCompraRepository notaFiscalCompraRepository;
+	
+	@Autowired
+	private NotaFiscalCompraService notaFiscalCompraService;
 	
 	@PostMapping(value = "/salvarNotaFiscalCompra")
 	public ResponseEntity<NotaFiscalCompra> salvarNotaFiscalCompra(@RequestBody @Valid NotaFiscalCompra notaFiscalCompra) throws ExceptionMentoriaJava {
@@ -85,5 +91,29 @@ public class NotaFiscalCompraController {
 		
 		return new ResponseEntity<List<NotaFiscalCompra>>(notaFiscalCompras, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/relatorioProdCompraNotaFiscal")
+	public ResponseEntity<List<ObjetoRequisicaoRelatorioProdCompraNotaFiscalDTO>> relatorioProdCompraNotaFiscal
+	(@RequestBody ObjetoRequisicaoRelatorioProdCompraNotaFiscalDTO objetoRequisicaoRelatorioProdCompraNotaFiscalDTO){
+		
+		List<ObjetoRequisicaoRelatorioProdCompraNotaFiscalDTO> retorno = 
+				new ArrayList<ObjetoRequisicaoRelatorioProdCompraNotaFiscalDTO>();
+		
+		retorno = notaFiscalCompraService.gerarRelatorioProdCompraNota(objetoRequisicaoRelatorioProdCompraNotaFiscalDTO);
+		
+		return new ResponseEntity<List<ObjetoRequisicaoRelatorioProdCompraNotaFiscalDTO>>(retorno, HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
