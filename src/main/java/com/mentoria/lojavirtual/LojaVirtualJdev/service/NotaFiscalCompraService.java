@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.mentoria.lojavirtual.LojaVirtualJdev.model.dto.ObjetoRequisicaoRelatorioProdCompraNotaFiscalDTO;
+import com.mentoria.lojavirtual.LojaVirtualJdev.model.dto.ObjetoRequisicaoRelatorioProdutoAlertaEstoqueDTO;
 
 @Service
 public class NotaFiscalCompraService {
@@ -68,5 +69,96 @@ public class NotaFiscalCompraService {
 		
 		return retorno;
 	}
+	
+	
+	
+	public List<ObjetoRequisicaoRelatorioProdutoAlertaEstoqueDTO> 
+	gerarRelatorioAlertaEstoque(ObjetoRequisicaoRelatorioProdutoAlertaEstoqueDTO alertaEstoque){
+		
+		List<ObjetoRequisicaoRelatorioProdutoAlertaEstoqueDTO> retorno = new ArrayList<ObjetoRequisicaoRelatorioProdutoAlertaEstoqueDTO>();
+		/*
+		String sql = 
+				"	SELECT "
+				  + " p.id_produto AS codigoProduto, "
+				  + " p.nome AS nomeProduto,  "
+				  + " p.valor_venda AS valorVendaProduto, " 
+				  + " ntp.quantidade AS quantidadeComprada, " 
+				  + " pj.id_pessoa AS codigoFornecedor, "
+				  + " pj.nome_pessoa AS nomeFornecedor, "
+				  + " cfc.data_compra AS dataCompra, "
+			      + " p.qtd_estoque  as quantidadeEstoque, p.qtd_alerta_estoque as qtdAlertaEstoque "
+		+	"	FROM "
+		+	"	    nota_fiscal_compra AS cfc "
+		+	"	INNER JOIN "
+		+	"	    nota_item_produto AS ntp ON cfc.id_nota_fiscal_compra = nota_fiscal_compra_id "
+		+	"	INNER JOIN "
+		+   "   produto AS p ON p.id_produto = ntp.produto_id  " 
+		+	"	INNER JOIN "
+		+	"	    pessoa_juridica AS pj ON pj.id_pessoa = cfc.pessoa_id  " 
+		+	"	WHERE ";
+	 sql += " cfc.data_compra >= '" +alertaEstoque.getDataInicial() + "' and ";
+	 sql += " cfc.data_compra <= '" +alertaEstoque.getDataFinal() + "' ";
+	 sql += " and p.alerta_qtd_estoque  = true and p.qtd_estoque  <= p.qtd_alerta_estoque ";
+			 
+	 if(!alertaEstoque.getCodigoNota().isEmpty()) {
+		 sql += " and cfc.id =  " + alertaEstoque.getCodigoNota() + " ";
+	 }
+		
+	 if(!alertaEstoque.getCodigoProduto().isEmpty()) {
+		 sql += " and p.id_produto =  " + alertaEstoque.getCodigoProduto() + " ";
+	 }
+		
+	 if(!alertaEstoque.getNomeProduto().isEmpty()) {
+		 sql += " upper(p.nome) like upper('% "   + alertaEstoque.getNomeProduto() + "')";
+	 }
+				
+	 if(!alertaEstoque.getNomeFornecedor().isEmpty()) {
+		 sql += " upper(pj.nome_pessoa) like upper('% " + alertaEstoque.getNomeFornecedor() + "')";
+	 }
+				*/
+		
+		String sql = 
+				"	SELECT "
+				  + " p.id_produto AS codigoProduto, "
+				  + " p.nome AS nomeProduto,  "
+				  
+				  
+				  
+				 
+				 
+			      + " p.qtd_estoque  as quantidadeEstoque, p.qtd_alerta_estoque as qtdAlertaEstoque "
+		+	"	FROM "
+		+	"	   produto p "
+		
+		+	"	WHERE ";
+	 
+	 sql += "  p.alerta_qtd_estoque  = true and p.qtd_estoque  <= p.qtd_alerta_estoque ";
+			 
+	
+		
+	 if(!alertaEstoque.getCodigoProduto().isEmpty()) {
+		 sql += " and p.id_produto =  " + alertaEstoque.getCodigoProduto() + " ";
+	 }
+		
+	 if(!alertaEstoque.getNomeProduto().isEmpty()) {
+		 sql += " upper(p.nome) like upper('% "   + alertaEstoque.getNomeProduto() + "')";
+	 }
+				
+	 
+				
+			
+			retorno = jdbcTemplate.query(sql, new BeanPropertyRowMapper(ObjetoRequisicaoRelatorioProdutoAlertaEstoqueDTO.class));
+			
+			return retorno;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

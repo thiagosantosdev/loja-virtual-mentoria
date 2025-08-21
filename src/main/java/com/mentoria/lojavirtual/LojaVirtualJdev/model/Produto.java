@@ -73,7 +73,7 @@ public class Produto implements Serializable{
 
 	@NotNull(message = "A QUANTIDADE EM ESTOQUE do produto deve ser informada!")
 	@Column(nullable = false)
-	private Integer qtdEstoque = 0;
+	private Integer qtdEstoque;
 
 	private Integer qtd_alerta_estoque = 0;
 	
