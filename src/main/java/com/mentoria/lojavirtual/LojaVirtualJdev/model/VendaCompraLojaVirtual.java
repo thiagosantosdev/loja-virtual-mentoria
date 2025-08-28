@@ -10,6 +10,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mentoria.lojavirtual.LojaVirtualJdev.enums.StatusVendaLojaVirtual;
 
 @Entity
 @Table(name = "vd_cp_lj_virt")
@@ -103,6 +106,22 @@ public class VendaCompraLojaVirtual implements Serializable {
 	
 	private Boolean excluido = Boolean.FALSE;
 	
+	@Column(nullable = false)
+	@NotNull(message = "Status da venda deve ser informado!")
+	@Enumerated(EnumType.STRING)
+	private StatusVendaLojaVirtual statusVendaLojaVirtual;
+	
+	
+	
+	
+	public StatusVendaLojaVirtual getStatusVendaLojaVirtual() {
+		return statusVendaLojaVirtual;
+	}
+
+	public void setStatusVendaLojaVirtual(StatusVendaLojaVirtual statusVendaLojaVirtual) {
+		this.statusVendaLojaVirtual = statusVendaLojaVirtual;
+	}
+
 	public PessoaFisica getPessoa() {
 		return pessoa;
 	}
